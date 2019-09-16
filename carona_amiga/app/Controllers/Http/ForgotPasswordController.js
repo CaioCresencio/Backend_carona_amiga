@@ -13,12 +13,13 @@ class ForgotPasswordController {
 
             user.token = crypto.randomBytes(10).toString('hex')
             user.token_created_at = new Date()
-
-            await user.save()        
+           
+            await user.save()
+                    
             await Mail.send(
                 ['emails.forgot_password'], 
 				{
-					email,
+					email: email,
 					token: user.token
 				},
 				message => {
@@ -28,13 +29,11 @@ class ForgotPasswordController {
                     .subject('Recuperação de senha')
 				}
             )
-           
         } catch(err){
             return response
                 .status(err.status)
                 .send({error:{ message:'Algo não deu certo, o email existe?'}})
         }
-    
     }
 
     async update ({ request,response }){
@@ -48,7 +47,7 @@ class ForgotPasswordController {
             if(tokenExpired){
                 return response
                     .status(401)
-                    .send({error: {message:'O token de recuperação está experidao'}})
+                    .send({error: {message:'O token de recuperação está expirado'}})
             }
 
             user.token = null;

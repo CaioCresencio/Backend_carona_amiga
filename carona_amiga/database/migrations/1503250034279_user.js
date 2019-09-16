@@ -12,6 +12,7 @@ class UserSchema extends Schema {
       table.string('password', 60).notNullable()
       table.string('token')
       table.timestamp('token_created_at')
+      table.string('university_id', 60).unique()
       table.timestamps()
     })
   }
